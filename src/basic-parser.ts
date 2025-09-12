@@ -18,6 +18,8 @@ import { z } from "zod";
  * @returns promise that produces a 2-d array of strings, 
  or array of transformed objects if schema is provided, or throws an error if validation fails during transformations
  */
+export async function parseCSV(path: string): Promise<string[][]>;
+export async function parseCSV<T>(path: string, schema: z.ZodType<T>): Promise<T[]>;
 export async function parseCSV<T>( // take in parameters 
   path: string, 
   schema?: z.ZodSchema<T> // optional schema parameter, now generic function
@@ -44,9 +46,10 @@ export async function parseCSV<T>( // take in parameters
   // schema is provided, fully validate and transform each row if possible
   let result: T[] = []
   
+  let lineNum = 0;
   for await (const line of rl) {
+    lineNum++;
     const values = line.split(",").map((v) => v.trim());
-    
     try {
       // validate the row using the provided schema
       const validatedRow = schema.parse(values);
@@ -54,7 +57,10 @@ export async function parseCSV<T>( // take in parameters
     } catch (error) {
       // if validation fails, communicate the failure back to the caller
       if (error instanceof z.ZodError) {
-        throw new Error(`CSV row validation failed: ${error.message} for row: [${values.join(', ')}]`);
+        throw new Error(
+        `CSV row validation failed at line ${lineNum}: ${error.message} (row: [${values.join(", ")}])`
+        // report line number and the row that caused the error to the caller
+      );
       }
       throw error;
     }
