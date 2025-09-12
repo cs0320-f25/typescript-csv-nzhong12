@@ -49,7 +49,7 @@ test("parseCSV wraps comma-containing fields in double quotes", async () => {
 
     expect(results1).toHaveLength(1); // only header rsow (one row)
     expect(results1[0]).toEqual(["Caesar", "Julius is interesting", "Veni, vidi, vici"]); 
-    // FAILS because the comma in the quote is not escaped!
+    // SHOULD FAIL because the comma in the quote is not escaped!
 });
 
 test("parseCSV does not return string with commas inside", async () => {
@@ -64,14 +64,14 @@ test("parseCSV does not return string with commas inside", async () => {
 
 test("parseCSV does not accept rows of different lengths", async () => {
   // bad CSV should throw an error when parsed
-  // FAILS because the parser does not currently check for this
+  // SHOULD FAIL because the parser does not currently check for this
   await expect(parseCSV(DIFFROWS_CSV_PATH)).rejects.toThrow();
 });
 
 test("parseCSV preserves leading space(s) and ending space(s) inside quotes", async () => {
   const results1 = await parseCSV(QUOTE_CSV_PATH)
 
-  expect(results1[1][2]).toBe("   a large chicken "); // FAILS because leading spaces are trimmed
+  expect(results1[1][2]).toBe("   a large chicken "); // SHOULD FAIL because leading spaces are trimmed
 });
 
 // testing schema validation and transformation
