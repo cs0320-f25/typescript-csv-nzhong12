@@ -1,5 +1,6 @@
 import { parseCSV } from "../src/basic-parser";
 import * as path from "path";
+import { z } from "zod";
 
 const PEOPLE_CSV_PATH = path.join(__dirname, "../data/people.csv");
 const QUOTE_CSV_PATH = path.join(__dirname, "../data/quote.csv");
