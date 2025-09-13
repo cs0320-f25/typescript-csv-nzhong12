@@ -1,3 +1,5 @@
+Github repo link: https://github.com/cs0320-f25/typescript-csv-nzhong12.git
+
 # Sprint 1: TypeScript CSV
 
 ### Task C: Proposing Enhancement
